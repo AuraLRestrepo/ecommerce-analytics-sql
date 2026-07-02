@@ -1,0 +1,82 @@
+// Diagrama ER para dbdiagram.io
+// Pega este archivo completo en https://dbdiagram.io para generar
+// el diagrama visual del modelo.
+
+Table categorias {
+  id SERIAL [pk]
+  nombre VARCHAR(100) [not null]
+  categoria_padre_id INT [ref: > categorias.id]
+  created_at TIMESTAMPTZ [not null]
+}
+
+Table productos {
+  id SERIAL [pk]
+  sku VARCHAR(50) [unique, not null]
+  nombre VARCHAR(200) [not null]
+  categoria_id INT [not null, ref: > categorias.id]
+  precio NUMERIC(10,2) [not null]
+  costo NUMERIC(10,2) [not null]
+  stock_actual INT [not null]
+  activo BOOLEAN [not null]
+  created_at TIMESTAMPTZ [not null]
+}
+
+Table clientes {
+  id SERIAL [pk]
+  email VARCHAR(150) [unique, not null]
+  nombre VARCHAR(150) [not null]
+  pais VARCHAR(60)
+  fecha_registro TIMESTAMPTZ [not null]
+}
+
+Table pedidos {
+  id SERIAL [pk]
+  cliente_id INT [not null, ref: > clientes.id]
+  estado estado_pedido [not null]
+  total NUMERIC(10,2) [not null]
+  fecha_pedido TIMESTAMPTZ [not null]
+}
+
+Table detalle_pedidos {
+  id SERIAL [pk]
+  pedido_id INT [not null, ref: > pedidos.id]
+  producto_id INT [not null, ref: > productos.id]
+  cantidad INT [not null]
+  precio_unitario NUMERIC(10,2) [not null]
+}
+
+Table pagos {
+  id SERIAL [pk]
+  pedido_id INT [not null, ref: > pedidos.id]
+  monto NUMERIC(10,2) [not null]
+  metodo metodo_pago [not null]
+  estado estado_pago [not null]
+  fecha_pago TIMESTAMPTZ [not null]
+}
+
+Table inventario_movimientos {
+  id SERIAL [pk]
+  producto_id INT [not null, ref: > productos.id]
+  tipo tipo_movimiento [not null]
+  cantidad INT [not null]
+  motivo VARCHAR(200)
+  referencia_pedido_id INT [ref: > pedidos.id]
+  fecha TIMESTAMPTZ [not null]
+}
+
+Table resenas {
+  id SERIAL [pk]
+  producto_id INT [not null, ref: > productos.id]
+  cliente_id INT [not null, ref: > clientes.id]
+  calificacion SMALLINT [not null]
+  comentario TEXT
+  fecha TIMESTAMPTZ [not null]
+}
+
+Table auditoria_pedidos {
+  id SERIAL [pk]
+  pedido_id INT [not null, ref: > pedidos.id]
+  estado_anterior estado_pedido
+  estado_nuevo estado_pedido [not null]
+  modificado_en TIMESTAMPTZ [not null]
+}

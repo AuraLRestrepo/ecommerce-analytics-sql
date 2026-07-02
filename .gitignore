@@ -1,0 +1,25 @@
+# Claude Code / IDE
+.claude/
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+env/
+*.egg-info/
+
+# Variables de entorno / secretos
+.env
+.env.*
+!.env.example
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Datos de Postgres si se llegaran a montar como bind mount local
+pgdata/
